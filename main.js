@@ -43,3 +43,48 @@ const songs = [
   { id: 20, title: 'Mamma Mia', artist: 'ABBA', genre: 'pop', language: 'english' },
 ];
 
+let currentGenre = 'all';
+let currentLanguage = 'all';
+
+const genreSelect = document.getElementById('genre');
+const languageSelect = document.getElementById('language');
+const songList = document.getElementById('song-list');
+
+function createSongHTML(song) {
+	return `
+		<div class="song" data-id="${song.id}">
+			<div class="song-title">${song.title}</div>
+			<div class="song-artist">${song.artist}</div>
+			<div class="song-info">
+				<div class="song-genre">${song.genre}</div>
+				<div class="song-language">${song.language}</div>
+			</div>
+		</div>
+	`;
+}
+
+function renderSongs() {
+	songList.innerHTML = '';
+
+	const filtered = songs.filter((song) => {
+		const matchGenre = currentGenre === 'all' || song.genre === currentGenre;
+		const matchLanguage = currentLanguage === 'all' || song.language === currentLanguage;
+		return matchGenre && matchLanguage;
+	});
+
+	filtered.forEach((song) => {
+		songList.insertAdjacentHTML('beforeend', createSongHTML(song));
+	});
+}
+
+genreSelect.addEventListener('change', (e) => {
+	currentGenre = e.target.value;
+	renderSongs();
+});
+
+languageSelect.addEventListener('change', (e) => {
+	currentLanguage = e.target.value;
+	renderSongs();
+});
+
+renderSongs();
